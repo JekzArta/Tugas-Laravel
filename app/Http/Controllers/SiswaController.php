@@ -69,4 +69,13 @@ class SiswaController extends Controller
             return redirect('/siswa/edit/'.$id)->with('error', 'Data Gagal Diupdate');
         }
     }
+
+    function destroy($id){
+        $status = DB::table('t_siswa')->where('id', $id)->delete();
+        if($status){
+            return redirect('/siswa')->with('success', 'Data Berhasil Dihapus');
+        } else {
+            return redirect('/siswa')->with('error', 'Data Gagal Dihapus');
+        }
+    }
 }

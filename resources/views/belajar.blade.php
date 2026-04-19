@@ -19,7 +19,7 @@ Belajar Laravel, Tulisan ini ditampilkan dari Views<br>
         <td>Nama Lengkap</td>
         <td>Jenis Kelamin</td>
         <td>Golongan Darah</td>
-        <td>Aksi</td>
+        <td colspans="2">Aksi</td>
     </tr>
     @foreach($siswa as $row)
     <tr>
@@ -28,6 +28,13 @@ Belajar Laravel, Tulisan ini ditampilkan dari Views<br>
         <td>{{ $row->jk }}</td>
         <td>{{ $row->golongan_darah }}</td>
         <td> <a href="{{ url('/siswa/edit/'.$row->id) }}">Edit</a> </td>
+        <td>
+            <form action="{{ url('/siswa/'.$row->id) }}" method="post">
+                @csrf
+                @method('DELETE')
+                <button type="submit">Hapus</button>
+            </form>
+        </td>
     </tr>
     @endforeach
 </table>
