@@ -25,6 +25,8 @@ Route::post('/kelas', [KelasController::class, 'store']);
 Route::get('/kelas/create', [KelasController::class, 'create']);
 
 Route::get('/siswa/create', [SiswaController::class, 'create']);
+Route::get('/siswa/edit/{id}', [SiswaController::class, 'edit']);
+Route::patch('/siswa/{id}', [SiswaController::class, 'update']);
 
 Route::get('/Pelajar/{username}', [SiswaController::class, 'pelajarUsername']);
 

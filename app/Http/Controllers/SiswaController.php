@@ -46,4 +46,27 @@ class SiswaController extends Controller
     function pelajarName($name){
         return view('pelajarjar', compact('name')); //pelajarjar itu nama file yang akan diakses di views
     }
+
+    function edit(Request $request, $id){
+        $siswa = DB::table('t_siswa')->find($id);
+        return view('siswa.form', compact('siswa'));
+    }
+
+    function update(Request $request, $id){
+        $request->validate([
+            'nis' => 'required|numeric',
+            'nama_lengkap' => 'required|string',
+            'jk' => 'required',
+            'golongan_darah' => 'required',
+        ]);
+        $input = $request->all();
+        unset($input['_token']);
+        unset($input['_method']);
+        $status = DB::table('t_siswa')->where('id', $id)->update($input);
+        if($status){
+            return redirect('/siswa')->with('success', 'Data Berhasil Diupdate');
+        } else {
+            return redirect('/siswa/edit/'.$id)->with('error', 'Data Gagal Diupdate');
+        }
+    }
 }

@@ -19,6 +19,7 @@ Belajar Laravel, Tulisan ini ditampilkan dari Views<br>
         <td>Nama Lengkap</td>
         <td>Jenis Kelamin</td>
         <td>Golongan Darah</td>
+        <td>Aksi</td>
     </tr>
     @foreach($siswa as $row)
     <tr>
@@ -26,6 +27,7 @@ Belajar Laravel, Tulisan ini ditampilkan dari Views<br>
         <td>{{ $row->nama_lengkap }}</td>
         <td>{{ $row->jk }}</td>
         <td>{{ $row->golongan_darah }}</td>
+        <td> <a href="{{ url('/siswa/edit/'.$row->id) }}">Edit</a> </td>
     </tr>
     @endforeach
 </table>
