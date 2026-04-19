@@ -1,0 +1,1 @@
+Name dengan nama: {{ $name }}
