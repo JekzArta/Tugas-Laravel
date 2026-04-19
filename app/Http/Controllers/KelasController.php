@@ -36,4 +36,36 @@ class KelasController extends Controller
     function create(){
         return view('ruang.form');
     } 
+
+    function edit(Request $request, $id){
+        $kelas = DB::table('t_kelas')->find($id);
+        return view('ruang.form', compact('kelas'));
+    }
+
+    function update(Request $request, $id){
+        $request->validate([
+            'nama_kelas' => 'required|string|max:255|unique:t_kelas,nama_kelas,'.$id,
+            'jurusan' => 'required|string|max:4|in:RPL,TKJ,TOI,TITL,TAV',
+            'nama_wali_kelas' => 'required|string|max:255',
+            'lokasi_ruangan' => 'nullable|min:3',
+        ]);
+        $input = $request->all();
+        unset($input['_token']);
+        unset($input['_method']);
+        $status = DB::table('t_kelas')->where('id', $id)->update($input);
+        if($status){
+            return redirect('/kelas')->with('success', 'Data Berhasil Diupdate');
+        } else {
+            return redirect('/kelas/edit/'.$id)->with('error', 'Data Gagal Diupdate');
+        }
+    }
+
+    function destroy($id){
+        $status = DB::table('t_kelas')->where('id', $id)->delete();
+        if($status){
+            return redirect('/kelas')->with('success', 'Data Berhasil Dihapus');
+        } else {
+            return redirect('/kelas')->with('error', 'Data Gagal Dihapus');
+        }
+    }
 }
