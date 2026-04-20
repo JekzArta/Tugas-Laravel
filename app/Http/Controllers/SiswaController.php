@@ -8,20 +8,35 @@ use Illuminate\Http\Request;
 class SiswaController extends Controller
 {
     function index(){
-        $siswa = DB::table('t_siswa')->get();
-        return view('belajar', compact('siswa'));
+        // $siswa = DB::table('t_siswa')->get();
+        // return view('belajar', compact('siswa'));
+
+        $data['siswa'] = \app\Siswa::orderBy('jk')->get();
+        return view('belajar', $data);
     }
 
     function store(Request $request){
-        $request->validate([
+
+        // $request->validate([
+        //     'nis' => 'required|numeric',
+        //     'nama_lengkap' => 'required|string|max:255', //Contohnya digunakan pada validasi max, dengan ‘key’ => ‘rule1:value|rule2’
+        //     'jk' => 'required',
+        //     'golongan_darah' => 'required',
+        // ]);
+
+        $rule = [
             'nis' => 'required|numeric',
-            'nama_lengkap' => 'required|string|max:255', //Contohnya digunakan pada validasi max, dengan ‘key’ => ‘rule1:value|rule2’
+            'nama_lengkap' => 'required|string',
             'jk' => 'required',
-            'golongan_darah' => 'required',
-        ]);
+            'golongan_darah' => 'required'
+        ];
+        $this->validate($request, $rule);
+        
         $input = $request->all();
-        unset($input['_token']); //menghindari token yang diinput oleh laravel karena input all() akan mengambil semua data yang diinput
-        $status = DB::table('t_siswa')->insert($input);
+        // unset($input['_token']); //menghindari token yang diinput oleh laravel karena input all() akan mengambil semua data yang diinput
+        // $status = DB::table('t_siswa')->insert($input);
+        
+        $status = \App\Siswa::create($input);
         if($status){
             return redirect('/siswa')-> with('success', 'Data Berhasil Ditambahkan');
         } else {
@@ -53,16 +68,20 @@ class SiswaController extends Controller
     }
 
     function update(Request $request, $id){
-        $request->validate([
+        $rule = [
             'nis' => 'required|numeric',
             'nama_lengkap' => 'required|string',
             'jk' => 'required',
-            'golongan_darah' => 'required',
-        ]);
+            'golongan_darah' => 'required'
+        ];
+        $this->validate($request, $rule);
+        
         $input = $request->all();
-        unset($input['_token']);
-        unset($input['_method']);
-        $status = DB::table('t_siswa')->where('id', $id)->update($input);
+        // unset($input['_token']);
+        // unset($input['_method']);
+        $siswa = \App\Siswa::find($id);
+        $status = $siswa->update($input);
+
         if($status){
             return redirect('/siswa')->with('success', 'Data Berhasil Diupdate');
         } else {
@@ -71,7 +90,11 @@ class SiswaController extends Controller
     }
 
     function destroy($id){
-        $status = DB::table('t_siswa')->where('id', $id)->delete();
+        $siswa = \App\Siswa::find($id);
+        $status = $siswa->delete();
+
+
+        //$status = DB::table('t_siswa')->where('id', $id)->delete();
         if($status){
             return redirect('/siswa')->with('success', 'Data Berhasil Dihapus');
         } else {
