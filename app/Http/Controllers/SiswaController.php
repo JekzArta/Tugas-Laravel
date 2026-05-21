@@ -11,7 +11,7 @@ class SiswaController extends Controller
         // $siswa = DB::table('t_siswa')->get();
         // return view('belajar', compact('siswa'));
 
-        $data['siswa'] = \app\Siswa::orderBy('jk')->get();
+        $data['siswa'] = \App\Models\Siswa::orderBy('jk')->get();
         return view('belajar', $data);
     }
 
@@ -30,13 +30,13 @@ class SiswaController extends Controller
             'jk' => 'required',
             'golongan_darah' => 'required'
         ];
-        $this->validate($request, $rule);
+        $request->validate($rule);
         
         $input = $request->all();
         // unset($input['_token']); //menghindari token yang diinput oleh laravel karena input all() akan mengambil semua data yang diinput
         // $status = DB::table('t_siswa')->insert($input);
         
-        $status = \App\Siswa::create($input);
+        $status = \App\Models\Siswa::create($input);
         if($status){
             return redirect('/siswa')-> with('success', 'Data Berhasil Ditambahkan');
         } else {
@@ -74,12 +74,12 @@ class SiswaController extends Controller
             'jk' => 'required',
             'golongan_darah' => 'required'
         ];
-        $this->validate($request, $rule);
+        $request->validate($rule);
         
         $input = $request->all();
         // unset($input['_token']);
         // unset($input['_method']);
-        $siswa = \App\Siswa::find($id);
+        $siswa = \App\Models\Siswa::find($id);
         $status = $siswa->update($input);
 
         if($status){
@@ -90,7 +90,7 @@ class SiswaController extends Controller
     }
 
     function destroy($id){
-        $siswa = \App\Siswa::find($id);
+        $siswa = \App\Models\Siswa::find($id);
         $status = $siswa->delete();
 
 
